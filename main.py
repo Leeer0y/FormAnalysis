@@ -8,7 +8,7 @@ def calculate_angle(a,b,c):
     a = np.array(a) # First
     b = np.array(b) # Mid
     c = np.array(c) # End
-    
+
     radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
     angle = np.abs(radians*180.0/np.pi)
     
@@ -22,6 +22,7 @@ cap = cv2.VideoCapture(1)
 # Curl counter variables
 counter = 0 
 stage = None
+InFrame = False
 
 ## Setup mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
@@ -64,20 +65,28 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
                 stage="up"
                 counter +=1
                 print(counter)
+
+            InFrame = True
                        
         except:
+            # When no-one is in frame
+            InFrame = False
             pass
         
+        # Welcome screen
+        if not InFrame :
+            cv2.rectangle(image, (0, 0), (255, 255), (255, 0, 0), -1)
+
         # Render curl counter
         # Setup status box
         cv2.rectangle(image, (0,0), (225,73), (245,117,16), -1)
         
         # Rep data
-        cv2.putText(image, 'REPS', (15,12), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
-        cv2.putText(image, str(counter), 
-                    (10,60), 
-                    cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
+       # cv2.putText(image, 'REPS', (15,12), 
+       #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv2.LINE_AA)
+       # cv2.putText(image, str(counter), 
+       #             (10,60), 
+        #            cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
         
         # Stage data
         cv2.putText(image, 'STAGE', (65,12), 
