@@ -75,11 +75,17 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         
         # Welcome screen
         if not InFrame :
-            cv2.rectangle(image, (0, 0), (255, 255), (255, 0, 0), -1)
+            print("meow ", image.shape)
+            h, w, c = image.shape
+            centerH = (int)(h / 2)
+            centerW = (int)(w / 2)
+            cv2.putText(image, "NO-ONE DETECTED", 
+                    (centerW - 260, centerH), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv2.LINE_AA)
 
         # Render curl counter
         # Setup status box
-        cv2.rectangle(image, (0,0), (225,73), (245,117,16), -1)
+        cv2.rectangle(image, (0,0), (225,73), (59, 59, 59), -1)
         
         # Rep data
        # cv2.putText(image, 'REPS', (15,12), 
@@ -99,7 +105,7 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         # Render detections
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                 mp_drawing.DrawingSpec(color=(245,117,66), thickness=2, circle_radius=2), 
-                                mp_drawing.DrawingSpec(color=(245,66,230), thickness=2, circle_radius=2) 
+                                mp_drawing.DrawingSpec(color=(66, 245, 69), thickness=2, circle_radius=2) 
                                  )               
         
         cv2.imshow('Mediapipe Feed', image)
